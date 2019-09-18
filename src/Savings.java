@@ -47,10 +47,4 @@ public class Savings extends Account {
 		this.minBalance = minBalance;
 	}
 
-	@Override
-	public String toString() {
-		return "Savings [serviceFee=" + serviceFee + ", interestRate=" + interestRate + ", minBalance=" + minBalance
-				+ "]";
-	}
-
 }

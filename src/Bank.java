@@ -1,4 +1,3 @@
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
@@ -10,11 +9,12 @@ import java.util.Scanner;
 public class Bank {
 
 	private String name = "GCU";
+	Scanner sc = new Scanner(System.in);
+	DecimalFormat DF = new DecimalFormat("0.00");
 
 	/** This method is the constructor for the bank @author CALV */
-
 	public Bank(String name) {
-		super();
+
 	}
 
 	/**
@@ -22,8 +22,6 @@ public class Bank {
 	 * user @author CALV
 	 */
 	protected void displayMenu(Checking checking, Savings savings) {
-
-		Scanner sc = new Scanner(System.in);
 
 		int option;
 		do {
@@ -43,8 +41,7 @@ public class Bank {
 			System.out.println(" 9: : Exit");
 			option = sc.nextInt();
 			this.doMenuAction(option, checking, savings);
-		} while (option < 10);
-
+		} while (option != 9);
 	}
 
 	/**
@@ -76,7 +73,7 @@ public class Bank {
 			displayExitScreen();
 			break;
 		default:
-			System.out.println("INPUT ERROR YOU HAVE BEEN LOGGED OUT");
+			System.out.println("INPUT ERROR");
 			break;
 		}
 	}
@@ -86,21 +83,19 @@ public class Bank {
 	 * 
 	 * @author CALV
 	 */
-	private void doEndMonth(Checking checking, Savings savings) {
+	protected void doEndMonth(Checking checking, Savings savings) {
 		double rate = savings.getInterestRate();
 		double fee = savings.getServiceFee();
-		DecimalFormat DF = new DecimalFormat("0.00");
 
 		if (savings.balance < 200) {
 			System.out.println("Savings balance is below $200");
-			System.out.println("A service fee of $" + fee + " has been charged to your account.");
+			System.out.println("A service fee of $" + DF.format(fee) + " has been charged to your account.");
 			savings.balance = savings.balance - 25;
 		}
 		double amount = savings.balance * rate * .083333;
 
 		if (savings.balance > 0) {
 			savings.balance = savings.balance + amount;
-			DF.setRoundingMode(RoundingMode.DOWN);
 			System.out.println("You earned $" + DF.format(amount) + " on your Savings account!");
 		}
 	}
@@ -120,16 +115,14 @@ public class Bank {
 	 */
 	protected void displayBalanceScreen(Checking checking, Savings savings) {
 
-		DecimalFormat DF = new DecimalFormat("0.00");
 		double checkBalance = checking.getBalance();
 		double saveBalance = savings.getBalance();
 		String checkAccount = checking.getAccount();
 		String saveAccount = savings.getAccount();
 
-		DF.setRoundingMode(RoundingMode.DOWN);
-		System.out.println("Your Checking (" + checkAccount.substring(checkAccount.length() - 4) + ") balance is $"
+		System.out.println("Your Checking **" + checkAccount.substring(checkAccount.length() - 4) + " balance is $"
 				+ DF.format(checkBalance) + "!");
-		System.out.println("Your Savings (" + saveAccount.substring(saveAccount.length() - 4) + ") balance is $"
+		System.out.println("Your Savings **" + saveAccount.substring(saveAccount.length() - 4) + " balance is $"
 				+ DF.format(saveBalance) + "!");
 	}
 
@@ -140,8 +133,6 @@ public class Bank {
 	 */
 	protected void displayWithdrawSavings(Savings savings) {
 
-		Scanner sw = new Scanner(System.in);
-
 		double serviceFee = savings.getServiceFee();
 		double minBalance = savings.getMinBalance();
 		double balance = savings.getBalance();
@@ -149,14 +140,13 @@ public class Bank {
 
 		double savingsWithdraw;
 		System.out.println("WITHDRAW from Savings Account number **" + account.substring(account.length() - 4));
-		System.out.println("Your Checking Account balance is $" + balance);
-		System.out.println("You will have a $" + serviceFee + " if the balance is below $" + minBalance
-				+ " at the end of the month.");
+		System.out.println("Your Savings Account balance is $" + DF.format(balance));
+		System.out.println("You will have a $" + DF.format(serviceFee) + " if the balance is below $"
+				+ DF.format(minBalance) + " at the end of the month.");
 		System.out.println("How much would you like to withdraw?");
 
-		savingsWithdraw = sw.nextDouble();
+		savingsWithdraw = sc.nextDouble();
 		savings.withDraw(savingsWithdraw);
-
 	}
 
 	/**
@@ -166,21 +156,19 @@ public class Bank {
 	 */
 	protected void displayWithdrawChecking(Checking checking) {
 
-		Scanner sw = new Scanner(System.in);
-
 		double overDraft = checking.getOverdraft();
 		double balance = checking.getBalance();
 		String account = checking.getAccount();
 
 		double checkingWithdraw;
 		System.out.println("WITHDRAW from Checking Account number **" + account.substring(account.length() - 4));
-		System.out.println("Your Checking Account balance is $" + balance);
-		System.out.println("You will have a $" + overDraft + " if the check amount is greater than your balance.");
+		System.out.println("Your Checking Account balance is $" + DF.format(balance));
+		System.out.println(
+				"You will have a $" + DF.format(overDraft) + " if the check amount is greater than your balance.");
 		System.out.println("How much would you like to withdraw?");
 
-		checkingWithdraw = sw.nextDouble();
+		checkingWithdraw = sc.nextDouble();
 		checking.doWithdraw(checkingWithdraw);
-
 	}
 
 	/**
@@ -188,19 +176,17 @@ public class Bank {
 	 * know how much the user would like to deposit @author CALV
 	 */
 	protected void displayDepositSavings(Savings savings) {
-		Scanner sd1 = new Scanner(System.in);
 
 		double balance2 = savings.getBalance();
 		String account2 = savings.getAccount();
 
 		double savingsDeposit;
 		System.out.println("DEPOSIT into Savings Account number **" + account2.substring(account2.length() - 4));
-		System.out.println("Your Savings balance is $" + balance2);
+		System.out.println("Your Savings balance is $" + DF.format(balance2));
 		System.out.println("How much would you like to deposit?");
 
-		savingsDeposit = sd1.nextDouble();
+		savingsDeposit = sc.nextDouble();
 		savings.doDeposit(savingsDeposit);
-
 	}
 
 	/**
@@ -209,18 +195,15 @@ public class Bank {
 	 */
 	protected void displayDepositChecking(Checking checking) {
 
-		Scanner sd = new Scanner(System.in);
-
 		double balance = checking.getBalance();
 		String account = checking.getAccount();
-
 		double checkingDeposit;
+
 		System.out.println("DEPOSIT into Checking Account number **" + account.substring(account.length() - 4));
-		System.out.println("Your Checking balance is $" + balance);
+		System.out.println("Your Checking balance is $" + DF.format(balance));
 		System.out.println("How much would you like to deposit?");
 
-		checkingDeposit = sd.nextDouble();
+		checkingDeposit = sc.nextDouble();
 		checking.doDeposit(checkingDeposit);
-
 	}
 }

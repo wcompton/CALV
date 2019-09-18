@@ -11,7 +11,7 @@ public class Account {
 	 * This method will complete withdraw functions for checking and savings
 	 * objects @author CALV
 	 */
-	public void withDraw(double amount) {
+	protected void withDraw(double amount) {
 		balance = balance - amount;
 	}
 
@@ -19,7 +19,7 @@ public class Account {
 	 * This method will complete deposit functions for checking and savings
 	 * objects @author CALV
 	 */
-	public void doDeposit(double amount) {
+	protected void doDeposit(double amount) {
 		balance = balance + amount;
 	}
 
