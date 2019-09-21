@@ -4,8 +4,12 @@
  */
 public class Account {
 
-	protected double balance;
-	protected String account;
+	private double balance;
+	private String account;
+
+	protected Account() {
+
+	}
 
 	/**
 	 * This method will complete withdraw functions for checking and savings

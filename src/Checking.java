@@ -19,10 +19,15 @@ public class Checking extends Account {
 	 * This method may perform withdraw functions in checking. This method appears
 	 * to be a duplicate in Account Class and may not be necessary @author CALV
 	 */
-	public void doWithdraw(double amount) {
-		balance = balance - amount;
+	public void doWithdraw(double amount, Checking checking) {
+		double withdraw = amount;
+		double balance = checking.getBalance();
+		balance = balance - withdraw;
+
 		if (balance < 0)
-			balance = balance - overdraft;
+			checking.setBalance(balance - checking.getOverdraft());
+		else
+			checking.setBalance(balance);
 
 	}
 

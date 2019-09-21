@@ -83,19 +83,20 @@ public class Bank {
 	 * 
 	 * @author CALV
 	 */
-	protected void doEndMonth(Checking checking, Savings savings) {
+	private void doEndMonth(Checking checking, Savings savings) {
 		double rate = savings.getInterestRate();
 		double fee = savings.getServiceFee();
 
-		if (savings.balance < 200) {
-			System.out.println("Savings balance is below $200");
+		if (savings.getBalance() < savings.getMinBalance()) {
+			System.out.println("Savings balance is below $" + savings.getMinBalance());
 			System.out.println("A service fee of $" + DF.format(fee) + " has been charged to your account.");
-			savings.balance = savings.balance - 25;
+			savings.setBalance(savings.getBalance() - fee);
 		}
-		double amount = savings.balance * rate * .083333;
+		double amount = savings.getBalance() * (rate / 12);
 
-		if (savings.balance > 0) {
-			savings.balance = savings.balance + amount;
+		if (savings.getBalance() > 0) {
+			savings.setBalance(savings.getBalance() + amount);
+
 			System.out.println("You earned $" + DF.format(amount) + " on your Savings account!");
 		}
 	}
@@ -104,7 +105,7 @@ public class Bank {
 	 * This method will contain the functionality of option 9 in the user interface
 	 * for exit @author CALV
 	 */
-	protected void displayExitScreen() {
+	private void displayExitScreen() {
 		System.out.println("You have succesfully exited the system");
 	}
 
@@ -113,7 +114,7 @@ public class Bank {
 	 * enters 5 in the interface, and after they make a withdraw or deposit @author
 	 * CALV
 	 */
-	protected void displayBalanceScreen(Checking checking, Savings savings) {
+	private void displayBalanceScreen(Checking checking, Savings savings) {
 
 		double checkBalance = checking.getBalance();
 		double saveBalance = savings.getBalance();
@@ -131,7 +132,7 @@ public class Bank {
 	 * about the minimum balance, and request a withdraw amount form the
 	 * user @author CALV
 	 */
-	protected void displayWithdrawSavings(Savings savings) {
+	private void displayWithdrawSavings(Savings savings) {
 
 		double serviceFee = savings.getServiceFee();
 		double minBalance = savings.getMinBalance();
@@ -154,7 +155,7 @@ public class Bank {
 	 * about overdraft fees, and request a withdraw amount form the user. If an
 	 * overdraft occurs it will display an overdraft notice @author CALV
 	 */
-	protected void displayWithdrawChecking(Checking checking) {
+	private void displayWithdrawChecking(Checking checking) {
 
 		double overDraft = checking.getOverdraft();
 		double balance = checking.getBalance();
@@ -168,14 +169,14 @@ public class Bank {
 		System.out.println("How much would you like to withdraw?");
 
 		checkingWithdraw = sc.nextDouble();
-		checking.doWithdraw(checkingWithdraw);
+		checking.doWithdraw(checkingWithdraw, checking);
 	}
 
 	/**
 	 * This method will display the current balance, account number, and request to
 	 * know how much the user would like to deposit @author CALV
 	 */
-	protected void displayDepositSavings(Savings savings) {
+	private void displayDepositSavings(Savings savings) {
 
 		double balance2 = savings.getBalance();
 		String account2 = savings.getAccount();
@@ -193,7 +194,7 @@ public class Bank {
 	 * This method will display the current balance, account number, and request to
 	 * know how much the user would like to deposit @author CALV
 	 */
-	protected void displayDepositChecking(Checking checking) {
+	private void displayDepositChecking(Checking checking) {
 
 		double balance = checking.getBalance();
 		String account = checking.getAccount();
